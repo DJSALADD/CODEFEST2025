@@ -1,0 +1,2 @@
+API_KEY = "8001f9800bfb40fbbdd7effd3a7b7558"
+GEMINI = "AIzaSyCvT-Rb6_JdwsVDABuyvhLxSXCMXc7npF8"
