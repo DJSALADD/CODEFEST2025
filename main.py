@@ -2,6 +2,7 @@ from config import *
 from google import genai
 
 client = genai.Client(api_key=GEMINI)
+client2 = genai.Client(api_key="AIzaSyBwqN60ljF6pSIO0P7v0GFzeNW_i55YMOE")
 
 chat = client.chats.create(model="gemini-2.0-flash")
 chat.send_message("You are a blank model that has no idea what I am talking about unless I taught it to you. Don't answer me unless I explained the topic to you. Act as a student")
