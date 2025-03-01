@@ -4,7 +4,7 @@ chat_box = document.getElementById('chat-box');
 button = document.getElementById('button');
 
 function onButtonClick() {
-    const question = document.getElementById('chat-input').value;
+    const question = document.getElementById('input').value;
     const response = "Testing a response";
     
     const receivedMessage = document.createElement('div');
