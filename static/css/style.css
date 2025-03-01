@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat';
+    background: rgb(101,121,191);
+    background: linear-gradient(0deg, rgba(101,121,191,1) 0%, rgba(203,232,245,1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1000px;
+   flex-direction: row;
+}
+
+.chat-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mascot-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 50px;
+}
+
+.chat-header {
+    background-color: #4A90E2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.chat-box {
+    padding: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    max-width: 80%;
+    margin-bottom: 15px; /* Slightly more space between messages */
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 18px; /* Larger font for readability */
+    line-height: 1.6;
+}
+
+.message.received {
+    background-color: #e1e4ea;
+    align-self: flex-start;
+}
+
+.message.sent {
+    background-color: #4A90E2;
+    color: white;
+    align-self: flex-end;
+}
+
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 15px; /* More padding for desktop */
+    background-color: #fff;
+}
+
+.chat-input input {
+    width: 85%;
+    padding: 15px; /* Larger input box */
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    font-size: 18px; /* Larger font in input */
+}
+
+.chat-input button {
+    padding: 12px 20px; /* Bigger button */
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px; /* Larger button text */
+}
+
+.chat-input button:hover {
+    background-color: #357ABD;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat UI</title>
+    <link rel="stylesheet" href="static\css\style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>TeachMe!</h1>
+            </div>
+            <div class="chat-box" id="chat-box">
+                <div class="message received">
+                    <p>Hello! How can I assist you today?</p>
+                </div>
+                <div class="message sent">
+                    <p>Can you help me with HTML and CSS?</p>
+                </div>
+            </div>
+
+            <div class="mascot-div">
+                <div class="mascot-container">
+                    <img src="https://globaltoynews.com/wp-content/uploads/2020/08/AdobeStock_28614315-924x1024.jpeg">
+                </div>
+            </div>
+
+            <div class="chat-input" id="chat-input">
+                <input type="text" placeholder="Type a message..." />
+                <button id="button">Send</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</html>
+
+
