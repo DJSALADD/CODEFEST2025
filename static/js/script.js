@@ -28,6 +28,15 @@ function onButtonClick() {
     sentMessage.classList.add('message', 'received');
     chat_box.appendChild(sentMessage);
 
+    const mascot = document.getElementById('mascot')
+    
+    const images = ['confused.png', 'curious.png', 'happy.png', 'neutral.png', 'wave.png', 'wave2.png'];
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const randomImage = images[randomIndex];
+ 
+    mascot.src = `../static/images/scrubby/${randomImage}`;
+
+
     document.getElementById('input').value = '';
    
     bounceAnimation(mascotContainer);
