@@ -43,16 +43,18 @@ def take_quiz(initial_subject):
         grading_response = chat.send_message(grading_prompt)
         print(grading_response.text)
         
-        if "correct answer" in grading_response.text.lower():
-            correct_answers.append(answer)
+        is_correct = "correct answer" in grading_response.text.lower()
         
-        # Store quiz data
+        # Store quiz data in dictionary
         quiz_data.append({
             "question": quiz_text,
             "user_answer": answer,
             "feedback": grading_response.text,
-            "correct": "correct answer" in grading_response.text.lower()
+            "correct": is_correct
         })
+        
+        if is_correct:
+            correct_answers.append(answer)
         
         counter += 1
 
@@ -64,13 +66,12 @@ def take_quiz(initial_subject):
     )
 
     score_response = chat.send_message(score_prompt)
-    print("\nScore Calculation Feedback:\n", score_response.text)
-
-    # Save quiz data to JSON file
-    with open('quiz_data.json', 'w') as json_file:
-        json.dump(quiz_data, json_file, indent=4)
     
-    print("Quiz data saved to 'quiz_data.json'.")
+    # Return to dictionary
+    return {
+        "quiz_data": quiz_data,
+        "score_feedback": score_response.text
+    }
 
 while True:
     user_input = input("User: ").strip()
@@ -90,8 +91,12 @@ while True:
         print("\nFinal Summary:\n", summary_response.text)       
         print("Generating a quiz based on your discussion...\n")
 
-        # Take the Quiz
-        take_quiz(initial_subject)
+        # Take the Quiz and get the quiz data as a dictionary
+        quiz_results = take_quiz(initial_subject)
+
+        # Print score
+        print("\nQuiz Results:")
+        print(quiz_results["score_feedback"])
 
         print("Session ended.")
         break
