@@ -1,6 +1,5 @@
 from config import *
 from google import genai
-import json
 
 # Extra keys
 client = genai.Client(api_key=GEMINI)
@@ -15,62 +14,77 @@ conversation_history = []
 def take_quiz(initial_subject):
     counter = 1
     answers = {}
-    correct_answers = []
+    correct_answers = {}
     quiz_data = []
 
     while counter <= 5:
+        # Generate a multiple choice question
         question_prompt = f"Create a multiple-choice question (with 4 choices) related to '{initial_subject}' based on the following conversation: {conversation_history}"
         quiz_response = chat.send_message(question_prompt)
-        
         quiz_text = quiz_response.text.strip()
-        print(f"Question {counter}: {quiz_text}")
-        
+
+        # Generate answer choices with the correct answer
+        choices_prompt = f"Provide four possible answer choices for the question: '{quiz_text}', and indicate the correct answer. Format:\nA) Choice 1\nB) Choice 2\nC) Choice 3\nD) Choice 4\nCorrect: X (A/B/C/D)"
+        choices_response = chat.send_message(choices_prompt)
+        choices_lines = choices_response.text.strip().split("\n")
+
+        choices = {}
+        correct_answer = None
+
+        for line in choices_lines:
+            if line.startswith("A)"):
+                choices["A"] = line[3:].strip()
+            elif line.startswith("B)"):
+                choices["B"] = line[3:].strip()
+            elif line.startswith("C)"):
+                choices["C"] = line[3:].strip()
+            elif line.startswith("D)"):
+                choices["D"] = line[3:].strip()
+            elif line.startswith("Correct:"):
+                correct_answer = line.split(":")[1].strip()
+
+        if len(choices) != 4 or correct_answer not in ["A", "B", "C", "D"]:
+            print("Error generating choices. Retrying...")
+            continue
+
+        # Display question and choices
+        print(f"\nQuestion {counter}: {quiz_text}")
+
+        # Get user input
         answer = input("Your Answer (A, B, C, or D): ").strip().upper()
-        
         while answer not in ['A', 'B', 'C', 'D']:
             print("Invalid input! Please enter A, B, C, or D.")
             answer = input("Your Answer (A, B, C, or D): ").strip().upper()
-        
+
+        # Store user answer and correct answer
         answers[counter] = answer
-        
-        grading_prompt = (
-            f"Here is the user's answer for question {counter}:\n"
-            f"Question: {quiz_text}\n"
-            f"User Answer: {answer}\n"
-            f"Please grade the answer and provide feedback, including whether the answer is correct or incorrect."
-        )
-        
-        grading_response = chat.send_message(grading_prompt)
-        print(grading_response.text)
-        
-        is_correct = "correct answer" in grading_response.text.lower()
-        
-        # Store quiz data in dictionary
+        correct_answers[counter] = correct_answer
+
+        # Grade the response
+        is_correct = answer == correct_answer
+        feedback = "Correct!" if is_correct else f"Incorrect. The correct answer was {correct_answer}) {choices[correct_answer]}."
+
+        # Store quiz data
         quiz_data.append({
             "question": quiz_text,
             "user_answer": answer,
-            "feedback": grading_response.text,
-            "correct": is_correct
+            "correct_answer": correct_answer,
+            "choices": choices,
+            "is_correct": is_correct,
+            "feedback": feedback
         })
-        
-        if is_correct:
-            correct_answers.append(answer)
-        
+
         counter += 1
 
-    score_prompt = (
-        f"Here are the user's answers: {answers}\n"
-        f"These were the correct answers: {correct_answers}\n"
-        f"Please calculate the score based on the user's answers and the correct answers. "
-        f"Each correct answer is worth 1 point. Return the percentage score."
-    )
+    # Calculate score
+    score = sum(1 for q in answers if answers[q] == correct_answers[q])
+    total_questions = len(correct_answers)
+    percentage_score = (score / total_questions) * 100
 
-    score_response = chat.send_message(score_prompt)
-    
-    # Return to dictionary
+    # Return the results as a dictionary
     return {
         "quiz_data": quiz_data,
-        "score_feedback": score_response.text
+        "score": f"You got {score}/{total_questions} correct ({percentage_score:.2f}%).",
     }
 
 while True:
@@ -96,7 +110,7 @@ while True:
 
         # Print score
         print("\nQuiz Results:")
-        print(quiz_results["score_feedback"])
+        print(quiz_results["score"])
 
         print("Session ended.")
         break
