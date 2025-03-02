@@ -15,23 +15,48 @@
             <div class="interface">
                 <div class="left-side">
                     <div class="quiz">
+                                    <!-- Trigger/Open The Modal -->
+                        <button id="quiz-button" class="modal-button">Quiz Me</button>
+
+                        <!-- The Modal -->
+                        <div id="myModal" class="modal">
+
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <div class="chat-header">
+                                    <p>Quiz</p>
+                                </div>
+                                <div class="quiz-input" id="quiz-input">
+                                    <input type="text" id="topic" placeholder="Type a topic..." />
+                                <button id="questionBtn" class="question-button" >New Question</button>
+                                </div>
+                                <p id="question">Question</p>
+                                <button class="answer-button" onclick="alert('Correct!')">C Choice</button>
+                                <button class="answer-button" onclick="alert('Incorrect!')">IC Choice</button>
+                                <button class="answer-button" onclick="alert('Incorrect!')">IC Choice</button>
+                                <button class="answer-button" onclick="alert('Incorrect!')">IC Choice</button>
+                            </div>
+                        </div>
+                        <button class="modal-button">Summary</button>
+                        <button class="dark-mode-button" id="dark-mode-button">Toggle Dark Mode</button>
                     </div>
                     <div class="mascot-div">
-                        <div class="mascot-container">
-                            <img src="\static\images\image.png">
+                        <div class="mascot-container" id="mascot-container">
+                            <img id="mascot" src="https://i.imgur.com/IP9ZWKQ.png">
                         </div>
                     </div>
                 </div>
                 <div class= "right-side">
                     <div class="chat-box" id="chat-box">
                         <div class="message received">
-                            <p>Hello! How can I assist you today?</p>
+                            <p>Hi, I'm Scrubby! Tell me about what you're studying.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="chat-input" id="chat-input">
-                <input type="text" id ="input" placeholder="Type a message..." />
+                <input type="text" id="input" placeholder="Type a message..." />
                 <button id="button">Send</button>
             </div>
         </div>
@@ -39,5 +64,3 @@
 </body>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </html>
-
-
