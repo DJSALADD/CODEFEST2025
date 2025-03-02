@@ -1,5 +1,6 @@
 from config import *
 from google import genai
+import json
 
 # Extra keys
 client = genai.Client(api_key=GEMINI)
@@ -15,6 +16,7 @@ def take_quiz(initial_subject):
     counter = 1
     answers = {}
     correct_answers = []
+    quiz_data = []
 
     while counter <= 5:
         question_prompt = f"Create a multiple-choice question (with 4 choices) related to '{initial_subject}' based on the following conversation: {conversation_history}"
@@ -44,6 +46,14 @@ def take_quiz(initial_subject):
         if "correct answer" in grading_response.text.lower():
             correct_answers.append(answer)
         
+        # Store quiz data
+        quiz_data.append({
+            "question": quiz_text,
+            "user_answer": answer,
+            "feedback": grading_response.text,
+            "correct": "correct answer" in grading_response.text.lower()
+        })
+        
         counter += 1
 
     score_prompt = (
@@ -56,7 +66,11 @@ def take_quiz(initial_subject):
     score_response = chat.send_message(score_prompt)
     print("\nScore Calculation Feedback:\n", score_response.text)
 
-
+    # Save quiz data to JSON file
+    with open('quiz_data.json', 'w') as json_file:
+        json.dump(quiz_data, json_file, indent=4)
+    
+    print("Quiz data saved to 'quiz_data.json'.")
 
 while True:
     user_input = input("User: ").strip()
