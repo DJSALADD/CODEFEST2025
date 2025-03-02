@@ -14,7 +14,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 900px;
+    height: 1000px;
     flex-direction: row;
 }
 
@@ -175,6 +175,10 @@ body {
     font-size: 24px;
 }
 
+.dark-mode-button:hover {
+  background-color: #cf351c;
+}
+
 .modal-button {
     font-family: 'Montserrat';
     padding: 15px 30px;
@@ -195,6 +199,10 @@ body {
     border-top: 1px solid #ccc;
     padding: 15px; /* More padding for desktop */
     background-color: #fff;
+}
+
+.dark-mode .quiz-input {
+  background-color: #0a143c;
 }
 
 .quiz-input input {
@@ -249,11 +257,15 @@ body {
   animation: popIn 0.4s ease-out;
 }
 
+.dark-mode .modal-content {
+  background-color: #0a143c;
+}
+
 /* The Close Button */
 .close {
-  color: #aaa;
+  color: #cf351c;
   float: right;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: bold;
 }
 
@@ -279,6 +291,14 @@ body {
 
     .answer-button:hover {
       background-color: #0a143c;
+    }
+
+    .dark-mode .answer-button {
+      background-color: #6f7fbf;
+    }
+
+    .dark-mode .answer-button:hover {
+      background-color: #273361;
     }
 
 /* Animations */
