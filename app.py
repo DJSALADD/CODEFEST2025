@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from wrapper import take_quiz, chatbox
 
 app = Flask(__name__)
@@ -22,6 +22,10 @@ def generate():
     message = chatbox(topic)
     print(message)
     return message 
+
+@app.route('/download')
+def download_file():
+    return send_file('summary.pdf', as_attachment=True)
 
 if __name__ == '__main__':
     app.run()
