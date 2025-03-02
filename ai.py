@@ -6,8 +6,8 @@ client = genai.Client(api_key=GEMINI)
 client2 = genai.Client(api_key="AIzaSyBwqN60ljF6pSIO0P7v0GFzeNW_i55YMOE")
 chat = client.chats.create(model="gemini-2.0-flash")
 
-initial_subject = input("Please enter the subject you'd like to teach: ").strip()
-print(f"Subject set to: {initial_subject}")
+#initial_subject = input("Please enter the subject you'd like to teach: ").strip()
+#print(f"Subject set to: {initial_subject}")
 
 conversation_history = []
 
@@ -86,7 +86,7 @@ def take_quiz(initial_subject):
         "quiz_data": quiz_data,
         "score": f"You got {score}/{total_questions} correct ({percentage_score:.2f}%).",
     }
-
+'''
 while True:
     user_input = input("User: ").strip()
 
@@ -162,3 +162,4 @@ while True:
 
     else:
         print("Unexpected response from API. Please try again.")
+'''

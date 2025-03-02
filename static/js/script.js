@@ -45,3 +45,44 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+generate_question = document.getElementById("questionBtn")
+generate_question.addEventListener('click', sendData);
+   function sendData() {
+      const input = document.getElementById('topic').value;  // Get the input value
+      fetch('/calculate', {
+        method: 'POST',  
+        headers: {
+          'Content-Type': 'application/json',  // Indicate we are sending JSON
+        },
+        body: JSON.stringify({ topic: input }),  // Convert data to JSON and send it
+      })
+      .then(response => response.json())  // Parse JSON response from Flask
+
+      .then(data => {
+    const buttons = document.getElementsByClassName('button-class'); // Assuming 'button-class' is the class name of your buttons
+    const choices = ['A', 'B', 'C', 'D'];
+    let j = 0;
+
+    // Ensure you have 4 buttons and data.choices contains A, B, C, D keys
+    for (let i = 0; i < buttons.length; i++) {
+        // Set the button's label (text) to the corresponding choice
+        buttons[i].textContent = data['choices'][choices[j]];
+
+        // Attach an event listener to each button
+        buttons[i].onclick = function() {
+            if (choices[j] === data['correct_answer']) {
+                alert('Correct!');
+            } else {
+                alert('Incorrect!');
+            }
+        };
+
+        // Move to the next choice for the next button
+        j++;
+    }
+})
+
+      .catch(error => {
+        console.error('Error:', error);  // Handle any errors
+      });
+    }
