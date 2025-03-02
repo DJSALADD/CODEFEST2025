@@ -9,27 +9,81 @@ chat = client.chats.create(model="gemini-2.0-flash")
 initial_subject = input("Please enter the subject you'd like to teach: ").strip()
 print(f"Subject set to: {initial_subject}")
 
+conversation_history = []
+
+def take_quiz(initial_subject):
+    counter = 1
+    answers = {}
+    correct_answers = []
+
+    while counter <= 5:
+        question_prompt = f"Create a multiple-choice question (with 4 choices) related to '{initial_subject}' based on the following conversation: {conversation_history}"
+        quiz_response = chat.send_message(question_prompt)
+        
+        quiz_text = quiz_response.text.strip()
+        print(f"Question {counter}: {quiz_text}")
+        
+        answer = input("Your Answer (A, B, C, or D): ").strip().upper()
+        
+        while answer not in ['A', 'B', 'C', 'D']:
+            print("Invalid input! Please enter A, B, C, or D.")
+            answer = input("Your Answer (A, B, C, or D): ").strip().upper()
+        
+        answers[counter] = answer
+        
+        grading_prompt = (
+            f"Here is the user's answer for question {counter}:\n"
+            f"Question: {quiz_text}\n"
+            f"User Answer: {answer}\n"
+            f"Please grade the answer and provide feedback, including whether the answer is correct or incorrect."
+        )
+        
+        grading_response = chat.send_message(grading_prompt)
+        print(grading_response.text)
+        
+        if "correct answer" in grading_response.text.lower():
+            correct_answers.append(answer)
+        
+        counter += 1
+
+    score_prompt = (
+        f"Here are the user's answers: {answers}\n"
+        f"These were the correct answers: {correct_answers}\n"
+        f"Please calculate the score based on the user's answers and the correct answers. "
+        f"Each correct answer is worth 1 point. Return the percentage score."
+    )
+
+    score_response = chat.send_message(score_prompt)
+    print("\nScore Calculation Feedback:\n", score_response.text)
+
+
+
 while True:
     user_input = input("User: ").strip()
 
     # Exit
     if user_input.lower() == "exit":
         print("Analyzing your explanations and summarizing key points...")
-        
-        #Provide gaps and improvements
+
         summary_prompt = (
             f"Analyze the user's responses during this session on '{initial_subject}'. "
             f"Identify any gaps, misunderstandings, or areas where the user lacked confidence. "
             f"Summarize what was correct and fill in any missing details to strengthen their understanding."
-            f"If there is no user response or not sufficient data give a summary of the topic: {user_input}"
-            f"When giving a response only output the answer you do not have to reply to this prompt"
+            f"If there is no user response or not sufficient data give a summary of the topic: {user_input}."
         )
-        
+
         summary_response = chat.send_message(summary_prompt)
-        print("\nFinal Summary:\n", summary_response.text)
-        
+        print("\nFinal Summary:\n", summary_response.text)       
+        print("Generating a quiz based on your discussion...\n")
+
+        # Take the Quiz
+        take_quiz(initial_subject)
+
         print("Session ended.")
         break
+
+    # Add the user input to history
+    conversation_history.append(user_input)
 
     # If input is related to the initial subject
     subject_check_prompt = (
