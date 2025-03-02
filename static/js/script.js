@@ -4,9 +4,9 @@ chat_box = document.getElementById('chat-box');
 button = document.getElementById('button');
 const darkModeButton = document.getElementById('dark-mode-button');
 const mascotContainer = document.getElementById('mascot-container');
+const question = document.getElementById('input').value;
 
 function onButtonClick() {
-    const question = document.getElementById('input').value;
     const response = "Testing a response";
     
     const sentMessage = document.createElement('div');
@@ -115,3 +115,60 @@ generate_question.addEventListener('click', sendData);
         console.error('Error:', error);  // Handle any errors
       });
     }
+
+    let listening = false;
+
+    function toggleListening() {
+      fetch(listening ? "http://127.0.0.1:5000/stop_listening" : "http://127.0.0.1:5000/start_listening", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          }
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log("Toggle response:", data.status);
+          listening = !listening;
+          document.getElementById("toggleBtn").innerText = listening ? "Stop Listening" : "Start Listening";
+          
+          if (listening) {
+              updateText();
+          }
+      })
+      .catch(error => console.error("Error toggling listening:", error));
+  }
+  
+  function updateText() {
+    if (!listening) return;
+
+    fetch("http://127.0.0.1:5000/get_text", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Set the speech-generated text into the input field
+        document.getElementById("input").value = data.text; 
+        
+        if (listening) {
+            setTimeout(updateText, 1000);
+        }
+    })
+    .catch(error => console.error("Error updating text:", error));
+}
+
+  
+  
+  
