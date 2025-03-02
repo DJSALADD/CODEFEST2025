@@ -10,7 +10,7 @@ the purpose of this documentation is so everyone knows what files I touched, in 
 
 - 'tails' on chat msg bubbles
 - chat msg bubble pop in animation
-- mascot images uploaded to \static\images\scrubby
+- mascot images uploaded to /static/images/scrubby
 - **mascot SPINS when clicked on** (my favourite addition by far, I put him in the spin cycle whenever I was idly staring at my monitor)
 - modal's dark overlay fade in animation
 - modal container pop in animation
@@ -27,6 +27,7 @@ the purpose of this documentation is so everyone knows what files I touched, in 
 - quiz modal topic input field styled similarly to chat input field
 - quiz modal buttons labeled as the correct (C) or incorrect (IC) answer for simpler testing
 - quiz modal elements renamed accordingly
+- fixed filepaths for css, js, and image files in index.html
 
 ## to-do list
 
