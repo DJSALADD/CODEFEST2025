@@ -7,24 +7,36 @@ const mascotContainer = document.getElementById('mascot-container');
 
 function onButtonClick() {
     const question = document.getElementById('input').value;
-    const response = "Testing a response";
-    
-    const sentMessage = document.createElement('div');
-    sentMessage.innerHTML = `<p>${response}</p>`;
-    sentMessage.classList.add('message', 'sent');
-    chat_box.appendChild(sentMessage);
 
+    fetch('/generate', {
+        method: 'POST',  
+        headers: {
+          'Content-Type': 'application/json',  // Indicate we are sending JSON
+        },
+        body: JSON.stringify({ topic: question }),  // Convert data to JSON and send it
+      })
+      .then(response => response.json())  // Parse JSON response from Flask
+.then(data => {
+    const response = data['topic']
     const receivedMessage = document.createElement('div');
     receivedMessage.innerHTML = `<p>${question}</p>`;
-    receivedMessage.classList.add('message', 'received');
+    receivedMessage.classList.add('message', 'sent');
     chat_box.appendChild(receivedMessage);
-    
+
+    const sentMessage = document.createElement('div');
+    sentMessage.innerHTML = `<p>${response}</p>`;
+    sentMessage.classList.add('message', 'received');
+    chat_box.appendChild(sentMessage);
+
     document.getElementById('input').value = '';
    
     bounceAnimation(mascotContainer);
-   
-}
-
+})
+      .catch(error => {
+        console.error('Error:', error);  // Handle any errors
+      });
+    }
+    
 function toggleDarkMode() {
     const body = document.body;
     body.classList.toggle('dark-mode');
@@ -87,30 +99,36 @@ generate_question.addEventListener('click', sendData);
       })
       .then(response => response.json())  // Parse JSON response from Flask
 
-      .then(data => {
-    const buttons = document.getElementsByClassName('button-class'); // Assuming 'button-class' is the class name of your buttons
-    const choices = ['A', 'B', 'C', 'D'];
+.then(data => {
+    const buttons = document.getElementsByClassName('answer-button');  // Get all buttons
+    const choices = ['A', 'B', 'C', 'D'];  // Define choice labels
     let j = 0;
+    const quiz_question = document.getElementById('question');  // Get the question element
+    quiz_question.textContent = data[0]['question'];  // Set the question text
 
     // Ensure you have 4 buttons and data.choices contains A, B, C, D keys
     for (let i = 0; i < buttons.length; i++) {
-        // Set the button's label (text) to the corresponding choice
-        buttons[i].textContent = data['choices'][choices[j]];
+        const choiceKey = choices[j];  // Get the current choice key (e.g., 'A', 'B', etc.)
+        const choice = data[0]['choices'][choiceKey];  // Get the choice text for the button
+        
+        // Set the button text to the choice
+        buttons[i].textContent = choice;
 
         // Attach an event listener to each button
-        buttons[i].onclick = function() {
-            if (choices[j] === data['correct_answer']) {
-                alert('Correct!');
-            } else {
-                alert('Incorrect!');
-            }
-        };
+        buttons[i].onclick = (function(choiceKey) {
+            return function() {
+                if (choiceKey === data[0]['correct_answer']) {
+                    alert('Correct!');
+                } else {
+                    alert('Incorrect!');
+                }
+            };
+        })(choiceKey); // Immediately invoke the function with the current choiceKey
 
         // Move to the next choice for the next button
         j++;
     }
 })
-
       .catch(error => {
         console.error('Error:', error);  // Handle any errors
       });

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from ai import take_quiz
+from wrapper import take_quiz, chatbox
 
 app = Flask(__name__)
 
@@ -12,8 +12,16 @@ def calculate():
     data = request.get_json()  # Get JSON data sent by the frontend
     topic = data.get('topic')
     quiz_data = take_quiz(topic)
-    print(quiz_data)
     return quiz_data
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    data = request.get_json()  # Get JSON data sent by the frontend
+    topic = data.get('topic')
+    print(topic)
+    message = chatbox(topic)
+    print(message)
+    return message 
 
 if __name__ == '__main__':
     app.run()
