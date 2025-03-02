@@ -13,7 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 1000px;
+    height: 900px;
    flex-direction: row;
 }
 
@@ -21,23 +21,44 @@ body {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 1000px;
+    width: 900px;
     height: 800px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
+.interface{
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+}
+
+.left-side{
+    width: 300px;
+    flex-direction: column;
+}
+
+.quiz {
+    height: 300px;
+    border: black 10px solid ;
+}
+
 .mascot-container {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     margin: 50px;
+}
+
+.right-side{
+    width: 500px;
+    height: 600px;
 }
 
 .chat-header {
@@ -54,6 +75,7 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    max-height: 600px;
 }
 
 .message {
